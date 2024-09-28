@@ -30,7 +30,6 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
     - ${AIRFLOW_PROJ_DIR:-.}/jobs:/opt/airflow/jobs
     - ${AIRFLOW_PROJ_DIR:-.}/lib:/opt/airflow/lib
-    - ${AIRFLOW_PROJ_DIR:-.}/airflow.cfg:/opt/airflow/airflow.cfg
     - ${AIRFLOW_PROJ_DIR:-.}/connections.sh:/opt/airflow/connections.sh
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
