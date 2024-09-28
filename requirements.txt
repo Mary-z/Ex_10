@@ -1,0 +1,4 @@
+datetime~=5.5
+faker~=30.0.0
+pandas
+psycopg2-binary~=2.9.9

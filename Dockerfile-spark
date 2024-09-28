@@ -1,0 +1,4 @@
+FROM bitnami/spark:3.5.2
+USER root
+COPY lib/postgresql-42.7.4.jar /opt/bitnami/spark/jars/
+RUN chmod 777 /opt/bitnami/spark/jars/postgresql-42.7.4.jar
