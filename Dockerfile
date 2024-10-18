@@ -15,7 +15,7 @@ RUN apt-get update && \
 
 
 USER airflow
-RUN pip install apache-airflow==2.10.1 apache-airflow-providers-openlineage==1.11.0 apache-airflow-providers-apache-spark==4.10.0 pyspark
+RUN pip install apache-airflow==2.10.1 apache-airflow-providers-openlineage==1.11.0 apache-airflow-providers-apache-spark==4.10.0 pyspark==3.5.2
 #
 USER root
 #RUN apt-get install -y procps
@@ -26,10 +26,6 @@ RUN sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A8D3785C
 RUN mkdir -p /opt/spark/jars
 #COPY ./postgresql-42.2.18.jar /opt/spark/jars/
 
-USER airflow
-COPY requirements.txt ./requirements.txt
-RUN pip install -r requirements.txt
-USER root
 RUN apt-get update && \
     wget http://archive.apache.org/dist/hadoop/core/hadoop-3.2.2/hadoop-3.2.2.tar.gz && \
     tar -xvf hadoop-3.2.2.tar.gz && \
@@ -39,3 +35,8 @@ RUN apt-get update && \
     export HADOOP_HOME=/usr/local/hadoop && \
     export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop && \
     export PATH=$PATH:$HADOOP_HOME/bin
+
+USER airflow
+COPY requirements.txt ./requirements.txt
+RUN pip install -r requirements.txt
+

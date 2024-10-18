@@ -4,7 +4,9 @@ x-spark-common: &spark-common
   image: bitnami/spark:3.5.2
   volumes:
     - ./jobs:/opt/bitnami/spark/jobs
-    - ./lib/postgresql-42.7.4.jar:/opt/bitnami/spark/jars/postgresql-42.7.4.jar
+    - ./spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
+  environment:
+          - SPARK_DRIVER_CLASS_PATH=/opt/bitnami/spark/jars/postgresql-42.7.4.jar
 
 x-airflow-common:
   &airflow-common
@@ -23,6 +25,14 @@ x-airflow-common:
     AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session'
     AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: 'true'
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
+    PG_HOST: ${PG_HOST}
+    PG_PORT: ${PG_PORT}
+    PG_NAME: ${PG_NAME}
+    PG_USER: ${PG_USER}
+    PG_PASSWORD: ${PG_PASSWORD}
+    CH_HOST: ${CH_HOST}
+    CH_USER: ${CH_USER}
+    CH_PASSWORD: ${CH_PASSWORD}
   volumes:
     - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
@@ -30,7 +40,6 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
     - ${AIRFLOW_PROJ_DIR:-.}/jobs:/opt/airflow/jobs
     - ${AIRFLOW_PROJ_DIR:-.}/lib:/opt/airflow/lib
-    - ${AIRFLOW_PROJ_DIR:-.}/airflow.cfg:/opt/airflow/airflow.cfg
     - ${AIRFLOW_PROJ_DIR:-.}/connections.sh:/opt/airflow/connections.sh
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
@@ -54,6 +63,7 @@ services:
     depends_on:
       - spark-master
     environment:
+      SPARK_CONF_DIR: /opt/bitnami/spark/conf/
       SPARK_MODE: worker
       SPARK_WORKER_CORES: 2
       SPARK_WORKER_MEMORY: 1g
@@ -93,6 +103,9 @@ services:
     ports:
       - "8123:8123"
       - "9000:9000"
+    environment:
+      CLICKHOUSE_USER: user  
+      CLICKHOUSE_PASSWORD: password
     volumes:
       - clickhouse_data:/var/lib/clickhouse
 
