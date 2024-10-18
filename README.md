@@ -14,13 +14,13 @@ docker-compose up airflow-init
 docker-compose up
 ```
 
-При первом запуске после построения необходимо создать подключения к базам данных в Airflow. Для этого необходимо подключиться к любому образу Airflow по его id:
+При первом запуске после построения необходимо создать подключения к базам данных в Airflow. Для этого подключаемся к любому образу Airflow по его id:
 
 ```bash
 docker ps | grep airflow
 docker exec -it <CONTAINER ID> bash
 ```
-И внутри контейнера запустить connections.sh:
+И внутри контейнера запускаем connections.sh:
 
 ```bash
 sh connections.sh
